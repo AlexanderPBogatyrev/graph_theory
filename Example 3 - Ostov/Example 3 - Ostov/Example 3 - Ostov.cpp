@@ -1,9 +1,10 @@
+﻿#include <vector>
 #include <iostream>
-#include <vector>
 #include <algorithm>
 
 using namespace std;
 
+// Структура для ребер
 struct edge
 {
 	int b, w, e;
