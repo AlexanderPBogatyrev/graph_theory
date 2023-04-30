@@ -67,6 +67,6 @@ int main()
 		if (unite(x, y)) ans += edges[i].w;
 	}
 
-	cout << ans;
+	cout << "Min_Ostov: " << ans;
 	return 0;
 }

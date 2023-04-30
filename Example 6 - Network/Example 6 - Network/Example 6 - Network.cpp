@@ -1,51 +1,65 @@
 #include <iostream>
 #include <vector>
-#include <tuple>
+#include <queue>
+#include <map>
 
 using namespace std;
 
-
-
-struct tup {
-    char name;
-    string pred_v;
-    int time;
-};
-
-int ans;
-
-void func(tup T, vector<tup>& arr, vector<int>& way) {
-    if (T.pred_v != "-") {
-        for (int i = 0; i < T.pred_v.size(); i + 2) func(arr[T.pred_v[i] - 65], arr, way);
-
-        int mx = 1e9;
-
-        for (int i = 0; i < T.pred_v.size(); i + 2) mx = max(mx, way[T.pred_v[i] - 65]);
-    }
-    else {
-        way[T.name - 65] = T.time;
-    }
-}
+const int INF = -2009000999;
 
 int main()
 {
-    int n, start, end;
-    string s, v;
+    std::ios_base::sync_with_stdio(false);
+    cin.tie(0);
 
+    int n, t, v;
+    string next_v;
+    char name;
     cin >> n;
 
-    vector<tup> arr;
-    vector<int> way(n);
+    vector<vector<pair<int, int>>> g(n);
+    priority_queue<pair<int, int>> q;
+    map<int, int> time;
+    vector<int> dist(n, INF);
+    vector<bool> next(n);
 
     for (int i = 0; i < n; ++i) {
-        tup T;
-        cin >> T.name >> T.pred_v >> T.time;
-        arr.push_back(T);
+        cin >> t;
+        time[i] = t;
+    }
+    for (int i = 0; i < n; ++i) {
+        cin >> name >> next_v;
+        if (next_v[0] == '-') next[i] = false;
+        else next[i] = true;
+        for (auto i : next_v) {
+            if (i >= 65 && i <= 90) g[i - 'A'].push_back({ name - 'A', time[i - 'A']});
+        }
     }
 
-    func(arr[arr.size() - 1], arr, way);
+    for (int i = 0; i < n; ++i) {
+        if (!next[i]) {
+            vector<bool> used(n);
+            dist[i] = 0;
+            q.push({ 0,  i });
+            while (!q.empty()) {
+                int a = q.top().second; q.pop();
+                if (used[a]) {
+                    continue;
+                }
+                used[a] = true;
+                for (auto u : g[a]) {
+                    int b = u.first;
+                    int w = u.second;
+                    if (dist[a] + w > dist[b]) {
+                        dist[b] = dist[a] + w;
+                        q.push({ -dist[b], b });
+                    }
+                }
+            }
+        }
+    }
+    cout << "Max_Time: " << dist[n - 1] + time[n - 1];
 
-    cout << way[arr[arr.size() - 1].name - 65] << endl;
-
+    cout << endl;
     return 0;
 }

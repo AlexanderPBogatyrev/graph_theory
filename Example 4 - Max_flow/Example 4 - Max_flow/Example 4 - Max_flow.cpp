@@ -68,13 +68,7 @@ int main() {
     }
 
     /**< Выводим ответ */
-    printf("%d\n", MaxFlow);
+    printf("MaxFlow: %d\n", MaxFlow);
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%3d ", c[i][j]);
-        }
-        printf("\n");
-    }
     return 0;
 }
